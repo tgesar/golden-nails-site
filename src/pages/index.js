@@ -10,20 +10,12 @@ export default function Home() {
       {/* Open Hours with Larger Images */}
       <div className="bg-[#111] py-16 px-6 md:px-12 flex flex-col items-center justify-center">
         <div className="flex flex-col lg:flex-row items-center justify-center gap-10 max-w-7xl w-full">
-
-          {/* Left 7 Images (3 top, 4 bottom) */}
-          <div className="flex flex-col gap-4 w-1/3">
-            <div className="grid grid-cols-3 gap-4">
-              <img src="/images/interior1.png" alt="Interior 1" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-              <img src="/images/interior2.png" alt="Interior 2" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-              <img src="/images/interior3.png" alt="Interior 3" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-            </div>
-            <div className="grid grid-cols-4 gap-4">
-              <img src="/images/interior4.png" alt="Interior 4" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-              <img src="/images/interior9.png" alt="Interior 9" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-              <img src="/images/interior10.png" alt="Interior 10" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-              <img src="/images/interior11.png" alt="Interior 11" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-            </div>
+          {/* Left 4 Images */}
+          <div className="grid grid-cols-2 gap-4 w-1/3">
+            <img src="/images/interior1.png" alt="Interior 1" className="w-full h-full max-h-72 object-cover rounded-md" />
+            <img src="/images/interior2.png" alt="Interior 2" className="w-full h-full max-h-72 object-cover rounded-md" />
+            <img src="/images/interior3.png" alt="Interior 3" className="w-full h-full max-h-72 object-cover rounded-md" />
+            <img src="/images/interior4.png" alt="Interior 4" className="w-full h-full max-h-72 object-cover rounded-md" />
           </div>
 
           {/* Open Hours Center */}
@@ -40,19 +32,12 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right 7 Images (3 top, 4 bottom) */}
-          <div className="flex flex-col gap-4 w-1/3">
-            <div className="grid grid-cols-3 gap-4">
-              <img src="/images/interior5.png" alt="Interior 5" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-              <img src="/images/interior6.png" alt="Interior 6" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-              <img src="/images/interior7.png" alt="Interior 7" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-            </div>
-            <div className="grid grid-cols-4 gap-4">
-              <img src="/images/interior8.png" alt="Interior 8" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-              <img src="/images/interior12.png" alt="Interior 12" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-              <img src="/images/interior13.png" alt="Interior 13" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-              <img src="/images/interior14.png" alt="Interior 14" className="w-full h-full max-h-[336px] object-cover rounded-md" />
-            </div>
+          {/* Right 4 Images */}
+          <div className="grid grid-cols-2 gap-4 w-1/3">
+            <img src="/images/interior5.png" alt="Interior 5" className="w-full h-full max-h-72 object-cover rounded-md" />
+            <img src="/images/interior6.png" alt="Interior 6" className="w-full h-full max-h-72 object-cover rounded-md" />
+            <img src="/images/interior7.png" alt="Interior 7" className="w-full h-full max-h-72 object-cover rounded-md" />
+            <img src="/images/interior8.png" alt="Interior 8" className="w-full h-full max-h-72 object-cover rounded-md" />
           </div>
         </div>
       </div>

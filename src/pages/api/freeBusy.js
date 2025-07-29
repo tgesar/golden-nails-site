@@ -1,5 +1,5 @@
-// pages/api/freeBusy.js
 import axios from 'axios';
+import { DateTime, Interval } from 'luxon';
 
 export default async function handler(req, res) {
   const calendarId = process.env.GOOGLE_CALENDAR_ID;
@@ -19,15 +19,14 @@ export default async function handler(req, res) {
 
     const accessToken = tokenRes.data.access_token;
 
-    const now = new Date();
-    const oneWeekLater = new Date();
-    oneWeekLater.setDate(now.getDate() + 7);
+    const now = DateTime.now().setZone('America/Chicago');
+    const oneWeekLater = now.plus({ days: 7 });
 
     const freeBusyRes = await axios.post(
       'https://www.googleapis.com/calendar/v3/freeBusy',
       {
-        timeMin: now.toISOString(),
-        timeMax: oneWeekLater.toISOString(),
+        timeMin: now.toISO(),
+        timeMax: oneWeekLater.toISO(),
         timeZone: 'America/Chicago',
         items: [{ id: calendarId }],
       },
@@ -41,12 +40,9 @@ export default async function handler(req, res) {
 
     const busyTimes = freeBusyRes.data.calendars[calendarId].busy;
 
-    const allSlots = [];
-
-    // Define open/close by weekday
     const hoursMap = {
       0: { open: 12, close: 17 }, // Sunday
-      1: { open: 10, close: 20 }, // Monday
+      1: { open: 10, close: 20 },
       2: { open: 10, close: 20 },
       3: { open: 10, close: 20 },
       4: { open: 10, close: 20 },
@@ -54,44 +50,38 @@ export default async function handler(req, res) {
       6: { open: 9, close: 18 },  // Saturday
     };
 
-    const roundUp15 = (date) => {
-      const minutes = date.getMinutes();
-      const offset = 15 - (minutes % 15);
-      if (offset < 15) date.setMinutes(minutes + offset);
-      date.setSeconds(0, 0);
-      return date;
-    };
+    const allSlots = [];
 
-    const padZero = (num) => num.toString().padStart(2, '0');
+    for (let i = 0; i < 7; i++) {
+      const date = now.plus({ days: i });
+      const day = date.weekday % 7; // luxon: Sunday = 7
 
-    for (let d = new Date(now); d <= oneWeekLater; d.setDate(d.getDate() + 1)) {
-      const current = new Date(d);
-      const day = current.getDay();
       const { open, close } = hoursMap[day];
+      const openTime = date.set({ hour: open, minute: 0, second: 0, millisecond: 0 });
+      const closeTime = date.set({ hour: close, minute: 0, second: 0, millisecond: 0 });
 
-      for (let hour = open; hour < close; hour++) {
-        for (let minute of [0, 15, 30, 45]) {
-          const slotStart = new Date(current);
-          slotStart.setHours(hour, minute, 0, 0);
-          const slotEnd = new Date(slotStart);
-          slotEnd.setMinutes(slotEnd.getMinutes() + 15);
+      for (
+        let slot = openTime;
+        slot < closeTime.minus({ minutes: 15 });
+        slot = slot.plus({ minutes: 15 })
+      ) {
+        const slotEnd = slot.plus({ minutes: 15 });
 
-          // Skip if slot is past closing or in the past
-          const latestStart = new Date(current);
-          latestStart.setHours(close, 0, 0, 0);
-          latestStart.setMinutes(latestStart.getMinutes() - 15);
-          if (slotStart > latestStart || slotStart < now) continue;
+        if (slot < now) continue;
 
-          const overlap = busyTimes.some(busy => {
-            return new Date(busy.start) < slotEnd && new Date(busy.end) > slotStart;
+        const overlap = busyTimes.some((busy) => {
+          const busyStart = DateTime.fromISO(busy.start);
+          const busyEnd = DateTime.fromISO(busy.end);
+          return Interval.fromDateTimes(busyStart, busyEnd).overlaps(
+            Interval.fromDateTimes(slot, slotEnd)
+          );
+        });
+
+        if (!overlap) {
+          allSlots.push({
+            start: slot.toISO(),
+            end: slotEnd.toISO(),
           });
-
-          if (!overlap) {
-            allSlots.push({
-              start: slotStart.toISOString(),
-              end: slotEnd.toISOString(),
-            });
-          }
         }
       }
     }

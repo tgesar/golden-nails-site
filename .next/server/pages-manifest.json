@@ -2,9 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/location": "pages/location.js",
+  "/api/freeBusy": "pages/api/freeBusy.js",
   "/booking": "pages/booking.js",
-  "/faq": "pages/faq.js",
-  "/contact": "pages/contact.js",
   "/": "pages/index.js"
 }

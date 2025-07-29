@@ -15,7 +15,7 @@ export default function FAQ() {
     {
       question: "What kind of payment do you accept?",
       answer:
-        "We accept cash, debit cards, MasterCard, and Visa. We do not accept checks or digital payment apps at this time.",
+        "We accept cash, debit cards, MasterCard, Visa, and Amex. We do not accept checks or digital payment apps at this time.",
     },
     {
       question: "What happens if I am running late for my appointment?",
@@ -30,7 +30,7 @@ export default function FAQ() {
     {
       question: "Is tipping required or expected?",
       answer:
-        "Tips are not required but are always appreciated by our staff. The standard tipping amount is around 15–20% of your service total.",
+        "Tips are not required but are always appreciated by our staff. The standard tipping amount is around 15–20% of your service total. We take venmo, cash,",
     },
     {
       question: "What if I have a special request that's not listed on the service menu?",
@@ -50,7 +50,7 @@ export default function FAQ() {
     {
       question: "What is your cancellation policy?",
       answer:
-        "Please notify us at least 24 hours in advance to cancel or reschedule. No-shows or repeated last-minute cancellations may result in a blacklist or fee.",
+        "Please notify us at least 24 hours in advance to cancel or reschedule. No-shows or repeated last-minute cancellations may result in a blacklist.",
     },
   ];
 
