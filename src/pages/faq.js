@@ -10,7 +10,7 @@ export default function FAQ() {
     {
       question: "Are taxes included in the prices listed?",
       answer:
-        "Taxes are not included in the prices listed. Applicable taxes will be added at checkout.",
+        "Yes! Taxes are already included in the prices listed.",
     },
     {
       question: "What kind of payment do you accept?",
