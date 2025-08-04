@@ -1,12 +1,12 @@
+// utils/googleAuth.js
 import { google } from 'googleapis';
 
 export const auth = new google.auth.OAuth2(
   process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.NEXTAUTH_URL + '/api/oauth2callback'
+  process.env.GOOGLE_CLIENT_SECRET
+  // No redirectUri needed for refresh_token usage
 );
 
-// Use the stored refresh token to get a valid access token
 auth.setCredentials({
   refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
 });
