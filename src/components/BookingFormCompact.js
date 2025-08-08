@@ -2,22 +2,34 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 /* ---------- Helpers ---------- */
+// Return YYYY-MM-DD for a given ISO time in a specific time zone
+function ymdInTZ(iso, tz = 'America/Chicago') {
+  // en-CA gives ISO-like YYYY-MM-DD
+  return new Intl.DateTimeFormat('en-CA', { timeZone: tz }).format(new Date(iso));
+}
+
+// Group slots by LOCAL date (America/Chicago), not UTC
 function groupByDate(slots = []) {
   return slots.reduce((acc, s) => {
-    const key = new Date(s.start).toISOString().slice(0, 10); // YYYY-MM-DD
+    const key = ymdInTZ(s.start, 'America/Chicago'); // e.g. "2025-08-08"
     (acc[key] ||= []).push(s);
     return acc;
   }, {});
 }
-function fmtDateLabel(iso) {
-  const d = new Date(iso);
-  return d.toLocaleDateString('en-US', {
+
+
+// ✅ Format a YYYY-MM-DD as a LOCAL date (no UTC shift)
+function fmtDateLabelLocal(ymd) {
+  if (!ymd) return '';
+  const [y, m, d] = ymd.split('-').map(Number);
+  const local = new Date(y, (m || 1) - 1, d || 1); // local midnight
+  return local.toLocaleDateString('en-US', {
     weekday: 'short',
     month: 'short',
     day: 'numeric',
-    timeZone: 'America/Chicago',
   });
 }
+
 function fmtTime(iso) {
   return new Date(iso).toLocaleTimeString('en-US', {
     hour: 'numeric',
@@ -88,7 +100,7 @@ export default function BookingFormCompact() {
 
   // service via pills
   const [activeCategory, setActiveCategory] = useState(serviceCategories[0]);
-  const [service, setService] = useState(''); // holds selected service name
+  const [service, setService] = useState(''); // selected service name
 
   // Load availability
   useEffect(() => {
@@ -141,7 +153,7 @@ export default function BookingFormCompact() {
           email,
           phone,
           service,
-          timeSlot: startDateTime, // for compatibility
+          timeSlot: startDateTime,
           startDateTime,
           endDateTime,
         }),
@@ -150,7 +162,6 @@ export default function BookingFormCompact() {
       if (!res.ok) throw new Error(json?.error || 'Booking failed');
 
       alert('✅ Appointment booked! A confirmation and calendar invite will be sent to your email.');
-      // reset
       setFirstName(''); setLastName(''); setEmail(''); setPhone('');
       setService(''); setTime(null);
     } catch (err) {
@@ -161,12 +172,10 @@ export default function BookingFormCompact() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-8">
-
       {/* 1) Service selection (pills) */}
       <div>
         <label className="block text-sm font-medium text-[#121212] mb-2">Service</label>
 
-        {/* Category pills */}
         <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
           {serviceCategories.map((cat) => {
             const active = cat === activeCategory;
@@ -187,7 +196,6 @@ export default function BookingFormCompact() {
           })}
         </div>
 
-        {/* Services under the active category */}
         <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
           {servicesData[activeCategory].map((item, i) => {
             const active = service === item.name;
@@ -210,7 +218,6 @@ export default function BookingFormCompact() {
           })}
         </div>
 
-        {/* Selected service preview */}
         {service && (
           <div className="mt-2 text-sm text-[#121212]/80">
             Selected: <span className="font-medium">{service}</span>
@@ -229,7 +236,12 @@ export default function BookingFormCompact() {
           min={Object.keys(byDate)[0] || undefined}
           max={Object.keys(byDate).slice(-1)[0] || undefined}
         />
-        {date && <div className="mt-2 text-sm text-[#121212]/70">Showing times for {fmtDateLabel(date)}</div>}
+        {date && (
+          <div className="mt-2 text-sm text-[#121212]/70">
+            {/* ✅ fixed label */}
+            Showing times for {fmtDateLabelLocal(date)}
+          </div>
+        )}
       </div>
 
       {/* 3) Time buttons */}
@@ -280,10 +292,8 @@ export default function BookingFormCompact() {
         </div>
       </div>
 
-      {/* Error */}
       {error && <div className="text-red-600 text-sm">{error}</div>}
 
-      {/* Submit */}
       <div className="pt-2">
         <button
           type="submit"
