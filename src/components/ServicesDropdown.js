@@ -42,7 +42,7 @@ const servicesData = {
       { name: 'Liquid Gel', price: '$55' },
       { name: 'Pink & White Powder', price: '$70' },
       { name: 'Pink & White Liquid', price: '$80' },
-      { name: '+Gel Polish', price: '$15+' },
+      { name: '+ Gel Polish', price: '$15+' },
     ],
   },
   'Fill In': {
@@ -62,8 +62,6 @@ export default function ServicesDropdown() {
 
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
-      <h2 className="text-3xl sm:text-4xl font-bold text-center mb-6">Our Services</h2>
-
       <div className="mb-6">
         <select
           className="w-full p-3 border border-gray-300 rounded-md text-lg focus:ring-2 focus:ring-yellow-500"
@@ -84,17 +82,17 @@ export default function ServicesDropdown() {
           <h3 className="text-2xl font-semibold mb-2 text-yellow-600 text-center sm:text-left">
             {selectedCategory}
           </h3>
-          <p className="text-gray-600 mb-4 text-center sm:text-left">
+          <p className="text-black mb-4 text-center sm:text-left">
             {servicesData[selectedCategory].description}
           </p>
-          <ul className="space-y-3">
+          <ul className="space-y-3 text-black">
             {servicesData[selectedCategory].services.map((service, index) => (
               <li
                 key={index}
                 className="flex flex-col sm:flex-row justify-between sm:items-center border-b pb-2"
               >
                 <span>{service.name}</span>
-                <span className="text-gray-500">{service.price}</span>
+                <span>{service.price}</span>
               </li>
             ))}
           </ul>

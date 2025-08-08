@@ -7,7 +7,7 @@ export default function Footer() {
         &copy; {new Date().getFullYear()} Golden Nails Golden Valley. All rights reserved.
       </p>
       <p className="text-xs mt-1">
-        Website built and maintained with 💅 by your web dev
+        Website built and maintained with 💅 by Tundra Webworks
       </p>
     </footer>
   );

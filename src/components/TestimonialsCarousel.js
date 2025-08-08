@@ -24,7 +24,6 @@ const testimonials = [
 export default function TestimonialsCarousel() {
   return (
     <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-3xl font-bold text-center mb-8">What Our Clients Say</h2>
       <div className="grid gap-6 md:grid-cols-3">
         {testimonials.map((testimonial, idx) => (
           <div key={idx} className="bg-white shadow-md p-4 rounded-md border border-gray-200">
