@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+// src/pages/faq.js
+import React, { useMemo, useState } from 'react';
+import Head from 'next/head';
 
 export default function FAQ() {
   const faqs = [
@@ -55,85 +57,117 @@ export default function FAQ() {
   ];
 
   const [openIndex, setOpenIndex] = useState(0);
+  const toggle = (i) => setOpenIndex((prev) => (prev === i ? null : i));
 
-  const toggle = (i) => {
-    setOpenIndex((prev) => (prev === i ? null : i));
-  };
+  // Build FAQ schema once (for SEO rich results)
+  const faqSchema = useMemo(
+    () => ({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqs.map((f) => ({
+        '@type': 'Question',
+        name: f.question,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: f.answer,
+        },
+      })),
+    }),
+    [faqs]
+  );
 
   return (
-    <div className="relative min-h-screen">
-      <div className="absolute inset-0 bg-[linear-gradient(180deg,#FAF8F3_0%,#ffffff_100%)]" />
+    <>
+      <Head>
+        <title>FAQ | Golden Nails</title>
+        <meta
+          name="description"
+          content="Answers to the most common questions about Golden Nails in Golden Valley—walk-ins, booking, payments, running late, group bookings, and more."
+        />
+        {/* JSON-LD for FAQ Rich Results */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+        />
+      </Head>
 
-      <div className="relative max-w-4xl mx-auto px-4 sm:px-6 py-16">
-        <div className="text-center mb-10">
-          <h1
-            className="text-4xl md:text-5xl font-semibold"
-            style={{ color: '#C4A24A', fontFamily: 'Playfair Display, serif' }}
-          >
-            Frequently Asked Questions
-          </h1>
-          <p className="mt-3 text-neutral-700">
-            Quick answers to the things we’re asked most.
-          </p>
-        </div>
+      <div className="relative min-h-screen">
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,#FAF8F3_0%,#ffffff_100%)]" />
 
-        <div className="space-y-4">
-          {faqs.map((item, i) => {
-            const isOpen = openIndex === i;
-            return (
-              <div
-                key={i}
-                className="rounded-2xl bg-white/90 backdrop-blur-sm border border-neutral-200 shadow-sm transition hover:shadow-md"
-              >
-                <button
-                  onClick={() => toggle(i)}
-                  className="w-full flex items-center justify-between p-5 text-left"
-                  aria-expanded={isOpen}
-                  aria-controls={`faq-panel-${i}`}
-                >
-                  <span className="text-lg font-semibold" style={{ color: '#C4A24A' }}>
-                    {item.question}
-                  </span>
-                  <svg
-                    className={`h-5 w-5 transition-transform duration-200 ${
-                      isOpen ? 'rotate-180' : ''
-                    }`}
-                    viewBox="0 0 20 20"
-                    fill="currentColor"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M5.23 7.21a.75.75 0 011.06.02L10 10.17l3.71-2.94a.75.75 0 111.04 1.08l-4.24 3.36a.75.75 0 01-.94 0L5.21 8.31a.75.75 0 01.02-1.1z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </button>
+        <div className="relative max-w-4xl mx-auto px-4 sm:px-6 py-16">
+          <div className="text-center mb-10">
+            <h1
+              className="text-4xl md:text-5xl font-semibold"
+              style={{ color: '#C4A24A', fontFamily: 'Playfair Display, serif' }}
+            >
+              Frequently Asked Questions
+            </h1>
+            <p className="mt-3 text-neutral-700">
+              Quick answers to the things we’re asked most.
+            </p>
+          </div>
 
+          <div className="space-y-4">
+            {faqs.map((item, i) => {
+              const isOpen = openIndex === i;
+              return (
                 <div
-                  id={`faq-panel-${i}`}
-                  className={`grid transition-[grid-template-rows] duration-200 ease-out ${
-                    isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
-                  }`}
+                  key={i}
+                  className="rounded-2xl bg-white/90 backdrop-blur-sm border border-neutral-200 shadow-sm transition hover:shadow-md"
                 >
-                  <div className="overflow-hidden">
-                    <div className="px-5 pb-5 text-neutral-800 leading-relaxed">
-                      {item.answer}
+                  <button
+                    onClick={() => toggle(i)}
+                    className="w-full flex items-center justify-between p-5 text-left"
+                    aria-expanded={isOpen}
+                    aria-controls={`faq-panel-${i}`}
+                  >
+                    <span
+                      className="text-lg font-semibold"
+                      style={{ color: '#C4A24A' }}
+                    >
+                      {item.question}
+                    </span>
+                    <svg
+                      className={`h-5 w-5 transition-transform duration-200 ${
+                        isOpen ? 'rotate-180' : ''
+                      }`}
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M5.23 7.21a.75.75 0 011.06.02L10 10.17l3.71-2.94a.75.75 0 111.04 1.08l-4.24 3.36a.75.75 0 01-.94 0L5.21 8.31a.75.75 0 01.02-1.1z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  </button>
+
+                  <div
+                    id={`faq-panel-${i}`}
+                    className={`grid transition-[grid-template-rows] duration-200 ease-out ${
+                      isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="px-5 pb-5 text-neutral-800 leading-relaxed">
+                        {item.answer}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
 
-        <p className="text-center text-sm text-neutral-500 mt-10">
-          Still have questions?{' '}
-          <a href="/contact" className="underline hover:opacity-80">
-            Contact us
-          </a>{' '}
-          and we’ll be happy to help.
-        </p>
+          <p className="text-center text-sm text-neutral-500 mt-10">
+            Still have questions?{' '}
+            <a href="/contact" className="underline hover:opacity-80">
+              Contact us
+            </a>{' '}
+            and we’ll be happy to help.
+          </p>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
