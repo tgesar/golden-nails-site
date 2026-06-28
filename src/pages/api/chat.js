@@ -24,6 +24,7 @@ Services & prices (exact):
 Manicure/Pedicure
 - Basic Manicure $32
 - Basic Manicure Gel $42
+- Express Pedicure $50
 - Express Pedicure Gel $50
 
 Waxing
